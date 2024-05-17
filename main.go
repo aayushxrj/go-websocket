@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
-	"time"
+	// "time"
+
+	// "strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"strconv"
 ) 
 
 var upgrader = websocket.Upgrader{
@@ -35,11 +37,36 @@ func wsHandler(ctx *gin.Context){
 	// }
 
 	// sending notification to client
-	i := 0
-	for {
-		i++;
-		conn.WriteMessage(websocket.TextMessage, []byte("New message (#"+strconv.Itoa(i)+")"))
-		time.Sleep(time.Second)
+	// i := 0
+	// for {
+	// 	i++;
+	// 	conn.WriteMessage(websocket.TextMessage, []byte("New message (#"+strconv.Itoa(i)+")"))
+	// 	time.Sleep(time.Second)
+	// }
+
+
+	// Reading message from client and sending response to client
+	for{
+		// Read message from client
+		_, message, err := conn.ReadMessage()
+		if err != nil{
+			fmt.Println("Error: ", err)
+			break
+		}
+
+		fmt.Printf("\nReceived: %s\n", message)
+
+		// Send response to client
+		if string(message) == "ping"{
+			message= []byte("pong")
+		}
+		err = conn.WriteMessage(websocket.TextMessage, message)
+		if err != nil{
+			fmt.Println("Error: ", err)
+			break
+		}
+
+		fmt.Printf("Sent: %s\n", message)
 	}
 }
 
