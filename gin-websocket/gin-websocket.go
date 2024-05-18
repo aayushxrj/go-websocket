@@ -53,6 +53,7 @@ func wsHandler(ctx *gin.Context){
 			break
 		}
 
+		fmt.Printf("%s sent: %s\n", conn.RemoteAddr(), string(message))
 		fmt.Printf("\nReceived: %s\n", message)
 
 		// Send response to client

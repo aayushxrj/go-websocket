@@ -49,7 +49,9 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
+		fmt.Printf("%s sent: %s\n", conn.RemoteAddr(), string(message))
 		fmt.Printf("\nReceived: %s\n", message)
+
 
 		// Send response to client
 		if string(message) == "ping"{
